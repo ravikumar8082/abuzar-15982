@@ -557,20 +557,26 @@
           this.showTodayModal=false; 
           this.selectedToday=[]; 
         }
+        todayTasks: JSON.parse(localStorage.getItem('todayTasks')||'[]'),
+
+      init() {
+        this.resetToday();
+
+        // now that 'this' is your Alpine component, you can respond with its real state:
+        window.addEventListener('message', e => {
+          if (e.data.type === 'REQUEST_ALL') {
+            e.source.postMessage({
+              type:    'RESPONSE_ALL',
+              name:    'ABUZAR',
+              today:   this.todayTasks,
+              active:  this.activeTasks(),
+              done:    this.doneTasks()
+              }, e.origin);
+            }
+          });
+        },
       }
     }
-
-  window.addEventListener('message', e => {
-  if (e.data.type === 'REQUEST_ALL') {
-    e.source.postMessage({
-      type: 'RESPONSE_ALL',
-      name: 'ABUZAR',
-      today: this.todayTasks,
-      active: this.activeTasks(),
-      done: this.doneTasks()
-    }, e.origin);
-  }
-});
   </script>
 </body>
 </html>
