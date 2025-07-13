@@ -560,5 +560,21 @@
       }
     }
   </script>
+  <script>
+  window.addEventListener('message', e => {
+    if (e.data.action === 'SEND_DATA') {
+      const data = {
+        todayTasks: window.todayTasks||[],
+        activeTasks: window.tasks.filter(t=>!t.done)||[],
+        doneTasks: window.tasks.filter(t=>t.done)||[]
+      };
+      window.parent.postMessage({
+        action: 'TODASHBOARD_DATA',
+        name: /* your employee name, e.g. */ 'ABUZAR',
+        data
+      }, '*');
+    }
+  });
+</script>
 </body>
 </html>
