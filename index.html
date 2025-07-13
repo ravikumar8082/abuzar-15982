@@ -4,12 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ABUZAR DASHBOARD</title>
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Alpine.js -->
   <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-  <!-- Animate.css for simple animations -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" integrity="sha512-b4JrW6HkwxeR6FzpZB4OxQ1P5WvgIYDL9T4N+gEyBh1k7owuMmhBXZBvx1yQF0EM5dfbXVLkGhbG64im+WuTew==" crossorigin="anonymous" />
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+        integrity="sha512-b4JrW6HkwxeR6FzpZB4OxQ1P5WvgIYDL9T4N+gEyBh1k7owuMmhBXZBvx1yQF0EM5dfbXVLkGhbG64im+WuTew=="
+        crossorigin="anonymous" />
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
   <header class="bg-white shadow p-6 flex justify-between items-center">
@@ -21,13 +21,16 @@
 
   <nav class="bg-white mt-4 mx-auto px-6 py-4 rounded-lg shadow w-full md:max-w-4xl flex space-x-4 uppercase">
     <button @click="tab='today'" :class="tab==='today'?'border-b-2 border-indigo-500':''">TODAY TASKS</button>
-    <button @click="tab='all'" :class="tab==='all'?'border-b-2 border-indigo-500':''">ALL TASKS</button>
+    <button @click="tab='all'"   :class="tab==='all'  ?'border-b-2 border-indigo-500':''">ALL TASKS</button>
   </nav>
 
   <main class="flex-grow mt-6 mx-auto w-full md:max-w-4xl p-4">
     <!-- ALL TASKS -->
     <section x-show="tab==='all'" x-transition>
-      <button @click="showAddModal=true" class="px-4 py-2 bg-indigo-600 text-white rounded-lg uppercase mb-6">ADD TASK</button>
+      <button @click="showAddModal=true"
+              class="px-4 py-2 bg-indigo-600 text-white rounded-lg uppercase mb-6">
+        ADD TASK
+      </button>
 
       <h3 class="text-xl font-semibold uppercase mb-4">ACTIVE TASKS</h3>
       <template x-for="job in activeTasks()" :key="job.id">
@@ -40,13 +43,18 @@
               </p>
               <div class="mt-2">
                 <label class="text-sm uppercase block">CREATED DATE</label>
-                <input type="text" x-bind:value="job.created" readonly class="w-full border p-1 rounded mb-2 bg-gray-100" />
+                <input type="text" x-bind:value="job.created" readonly
+                       class="w-full border p-1 rounded mb-2 bg-gray-100" />
                 <label class="text-sm uppercase block">DEADLINE</label>
-                <input type="date" x-model="job.deadline" @change="save()" class="w-full border p-1 rounded mb-2" />
+                <input type="date" x-model="job.deadline" @change="save(); pushToSheet(job,'active')"
+                       class="w-full border p-1 rounded mb-2" />
               </div>
             </div>
             <div class="ml-4 space-y-2 text-center uppercase">
-              <button @click="markDoneById(job.id)" class="w-full px-2 py-1 bg-green-500 text-white rounded">MARK DONE</button>
+              <button @click="markDoneById(job.id)"
+                      class="w-full px-2 py-1 bg-green-500 text-white rounded">
+                MARK DONE
+              </button>
               <div>
                 <span class="text-sm uppercase">REVISIONS</span>
                 <div class="inline-flex mt-1">
@@ -57,7 +65,8 @@
               </div>
               <div>
                 <label class="text-sm uppercase">PAYMENT</label>
-                <select x-model="job.payment" @change="save()" class="mt-1 px-2 py-1 border rounded w-full">
+                <select x-model="job.payment" @change="save(); pushToSheet(job,'active')"
+                        class="mt-1 px-2 py-1 border rounded w-full">
                   <option value="PENDING">PENDING</option>
                   <option value="PAID">PAID</option>
                   <option value="DON'T KNOW">DON'T KNOW</option>
@@ -75,14 +84,24 @@
           <div class="flex justify-between items-start">
             <div>
               <h4 class="text-lg font-medium uppercase" x-text="job.name"></h4>
-              <p class="text-sm text-gray-500 uppercase">DONE ON: <span x-text="job.done"></span></p>
-              <p class="text-sm text-gray-500 uppercase">DEADLINE: <span x-text="job.deadline"></span></p>
-              <p class="text-sm text-gray-500 uppercase">REVISIONS: <span x-text="job.revisions"></span></p>
-              <p class="text-sm text-gray-500 uppercase">PAYMENT: <span x-text="job.payment"></span></p>
+              <p class="text-sm text-gray-500 uppercase">
+                DONE ON: <span x-text="job.done"></span>
+              </p>
+              <p class="text-sm text-gray-500 uppercase">
+                DEADLINE: <span x-text="job.deadline"></span>
+              </p>
+              <p class="text-sm text-gray-500 uppercase">
+                REVISIONS: <span x-text="job.revisions"></span>
+              </p>
+              <p class="text-sm text-gray-500 uppercase">
+                PAYMENT: <span x-text="job.payment"></span>
+              </p>
               <p class="mt-2 text-gray-600" x-text="job.description"></p>
             </div>
             <div class="ml-4 space-y-2 uppercase text-center">
-              <button @click="reviseAgain(job.id)" class="px-2 py-1 bg-yellow-500 text-white rounded">REVISE AGAIN</button>
+              <button @click="reviseAgain(job.id)" class="px-2 py-1 bg-yellow-500 text-white rounded">
+                REVISE AGAIN
+              </button>
             </div>
           </div>
         </div>
@@ -92,37 +111,52 @@
     <!-- TODAY TASKS -->
     <section x-show="tab==='today'" x-transition>
       <h2 class="text-2xl font-semibold uppercase mb-4">TODAY'S TASKS</h2>
-      <button @click="showTodayModal=true" class="px-4 py-2 bg-indigo-600 text-white rounded-lg uppercase mb-4">SELECT TASKS</button>
+      <button @click="showTodayModal=true"
+              class="px-4 py-2 bg-indigo-600 text-white rounded-lg uppercase mb-4">
+        SELECT TASKS
+      </button>
       <template x-for="job in todayTasks" :key="job.id">
         <div class="bg-white p-4 rounded-lg shadow mb-4 animate__animated animate__fadeInUp">
           <h4 class="text-lg font-medium uppercase" x-text="job.name"></h4>
           <p class="text-gray-600">
-            <span class="cursor-pointer" @click="showDesc(job)" x-text="job.description.slice(0,5)+'...'">...</span>
+            <span class="cursor-pointer" @click="showDesc(job)"
+                  x-text="job.description.slice(0,5)+'...'"></span>
           </p>
-          <p class="text-sm text-gray-500 uppercase">DEADLINE: <span x-text="job.deadline"></span></p>
+          <p class="text-sm text-gray-500 uppercase">
+            DEADLINE: <span x-text="job.deadline"></span>
+          </p>
         </div>
       </template>
     </section>
   </main>
 
   <!-- MODALS -->
-  <div x-show="showAddModal||showDescModal||showTodayModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+  <div x-show="showAddModal||showDescModal||showTodayModal"
+       class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
     <div class="bg-white p-6 rounded-lg shadow-xl w-11/12 md:w-1/3 animate__animated animate__zoomIn">
       <!-- ADD TASK -->
       <template x-if="showAddModal">
         <div>
           <h3 class="text-xl font-semibold uppercase mb-4">ADD NEW TASK</h3>
           <label class="text-sm uppercase">CREATION DATE</label>
-          <input type="text" x-bind:value="newJob.created" readonly class="w-full mb-2 p-2 border rounded bg-gray-100" />
+          <input type="text" x-bind:value="newJob.created" readonly
+                 class="w-full mb-2 p-2 border rounded bg-gray-100" />
           <label class="text-sm uppercase">TASK NAME</label>
-          <input x-model="newJob.name" type="text" placeholder="Job Name" class="w-full mb-2 p-2 border rounded" />
+          <input x-model="newJob.name" type="text" placeholder="Job Name"
+                 class="w-full mb-2 p-2 border rounded" />
           <label class="text-sm uppercase">DESCRIPTION</label>
-          <textarea x-model="newJob.description" placeholder="Description" class="w-full mb-2 p-2 border rounded"></textarea>
+          <textarea x-model="newJob.description" placeholder="Description"
+                    class="w-full mb-2 p-2 border rounded"></textarea>
           <label class="text-sm uppercase">DEADLINE</label>
-          <input x-model="newJob.deadline" type="date" class="w-full mb-4 p-2 border rounded" />
+          <input x-model="newJob.deadline" type="date"
+                 class="w-full mb-4 p-2 border rounded" />
           <div class="flex justify-end space-x-2">
-            <button @click="addJob()" class="px-4 py-2 bg-indigo-600 text-white rounded uppercase">ADD</button>
-            <button @click="closeModals()" class="px-4 py-2 border rounded uppercase">CANCEL</button>
+            <button @click="addJob()" class="px-4 py-2 bg-indigo-600 text-white rounded uppercase">
+              ADD
+            </button>
+            <button @click="closeModals()" class="px-4 py-2 border rounded uppercase">
+              CANCEL
+            </button>
           </div>
         </div>
       </template>
@@ -132,7 +166,9 @@
         <div>
           <h3 class="text-xl font-semibold uppercase mb-4">DESCRIPTION</h3>
           <p x-text="descContent" class="mb-4"></p>
-          <button @click="closeModals()" class="px-4 py-2 border rounded uppercase">CLOSE</button>
+          <button @click="closeModals()" class="px-4 py-2 border rounded uppercase">
+            CLOSE
+          </button>
         </div>
       </template>
 
@@ -147,8 +183,12 @@
             </div>
           </template>
           <div class="flex justify-end space-x-2">
-            <button @click="addTodayTasks()" class="px-4 py-2 bg-indigo-600 text-white rounded uppercase">ADD</button>
-            <button @click="closeModals()" class="px-4 py-2 border rounded uppercase">CANCEL</button>
+            <button @click="addTodayTasks()" class="px-4 py-2 bg-indigo-600 text-white rounded uppercase">
+              ADD
+            </button>
+            <button @click="closeModals()" class="px-4 py-2 border rounded uppercase">
+              CANCEL
+            </button>
           </div>
         </div>
       </template>
@@ -156,58 +196,109 @@
   </div>
 
   <script>
+    const SHEET_URL = 'https://script.google.com/macros/s/AKfycbx8AG9ktOqPbvKeM6mRlqIEOYh4ouGLHGjQWt8hNHnh0_xwV-HYPpFbW-ng2j8C7PEZ/exec';
+
+    function pushToSheet(task, section) {
+      fetch(SHEET_URL, {
+        method: 'POST',
+        body: JSON.stringify({
+          employee: 'ABUZAR',
+          section,
+          id:          task.id,
+          name:        task.name,
+          description: task.description,
+          deadline:    task.deadline,
+          revisions:   task.revisions,
+          payment:     task.payment
+        })
+      }).catch(console.error);
+    }
+
     function taskApp(){
       return {
-        tab:'today',
-        status:localStorage.getItem('status')||'FREE',
-        tasks:JSON.parse(localStorage.getItem('tasks')||'[]'),
-        todayTasks:JSON.parse(localStorage.getItem('todayTasks')||'[]'),
-        newJob:{name:'',description:'',deadline:new Date().toISOString().substr(0,10),created:new Date().toLocaleDateString(),revisions:0,payment:'PENDING',id:null},
-        descContent:'',
-        selectedToday:[],
-        showAddModal:false,showDescModal:false,showTodayModal:false,
-        init(){
-          // Initialize state and AOS
-          if (window.AOS) AOS.init();
+        tab: 'today',
+        status: localStorage.getItem('status')||'FREE',
+        tasks: JSON.parse(localStorage.getItem('tasks')||'[]'),
+        todayTasks: JSON.parse(localStorage.getItem('todayTasks')||'[]'),
+        newJob: { name:'', description:'', deadline:new Date().toISOString().substr(0,10),
+                  created:new Date().toLocaleDateString(), revisions:0, payment:'PENDING', id:null },
+        descContent:'', selectedToday:[],
+        showAddModal:false, showDescModal:false, showTodayModal:false,
 
-          // Listen for owner dashboard data requests
-          window.addEventListener('message', e => {
-            if (e.data.type === 'REQUEST_ALL') {
-              e.source.postMessage({
-                type: 'RESPONSE_ALL',
-                name: 'ABUZAR',
-                today:  this.todayTasks,
-                active: this.activeTasks(),
-                done:   this.doneTasks()
-              }, e.origin);
-            }
-          });
+        init(){ this.resetToday(); },
+        save(){ localStorage.setItem('tasks', JSON.stringify(this.tasks));
+                localStorage.setItem('status', this.status);
+                localStorage.setItem('todayTasks', JSON.stringify(this.todayTasks)); },
 
-          this.resetToday();
-        },
-        save(){
-          localStorage.setItem('tasks', JSON.stringify(this.tasks));
-          localStorage.setItem('status', this.status);
-          localStorage.setItem('todayTasks', JSON.stringify(this.todayTasks));
-        },
         toggleStatus(){ this.status = this.status==='FREE'?'BUSY':'FREE'; this.save(); },
+
         activeTasks(){ return this.tasks.filter(j=>!j.done); },
-        doneTasks(){ return this.tasks.filter(j=>j.done); },
+        doneTasks()  { return this.tasks.filter(j=>j.done);   },
+
         addJob(){
-          const j = {...this.newJob, id:Date.now()};
+          const j = {...this.newJob, id: Date.now()};
           this.tasks.push(j);
-          this.newJob={name:'',description:'',deadline:new Date().toISOString().substr(0,10),created:new Date().toLocaleDateString(),revisions:0,payment:'PENDING',id:null};
+          pushToSheet(j,'active');
+          this.newJob = { name:'', description:'', deadline:new Date().toISOString().substr(0,10),
+                          created:new Date().toLocaleDateString(), revisions:0, payment:'PENDING', id:null };
           this.save(); this.closeModals();
         },
-        removeById(id){ this.tasks=this.tasks.filter(j=>j.id!==id); this.save(); },
-        markDoneById(id){ const i=this.tasks.findIndex(j=>j.id===id); this.tasks[i].done=new Date().toLocaleDateString(); this.save(); },
-        changeRevisionById(id,val){ const i=this.tasks.findIndex(j=>j.id===id); this.tasks[i].revisions=Math.max(0,this.tasks[i].revisions+val); this.save(); },
-        showDesc(job){ this.descContent=job.description; this.showDescModal=true; },
-        toggleSelection(id){ const idx=this.selectedToday.indexOf(id.toString()); if(idx>=0) this.selectedToday.splice(idx,1); else this.selectedToday.push(id.toString()); },
-        addTodayTasks(){ this.todayTasks=this.tasks.filter(j=>this.selectedToday.includes(j.id.toString())); this.tab='today'; this.save(); this.closeModals(); },
-        resetToday(){ const today=new Date().toLocaleDateString(); if(localStorage.getItem('todayDate')!==today){ localStorage.setItem('todayDate',today); this.todayTasks=[]; this.save(); } },
-        reviseAgain(id){ const i=this.tasks.findIndex(j=>j.id===id); delete this.tasks[i].done; this.save(); },
-        closeModals(){ this.showAddModal=false; this.showDescModal=false; this.showTodayModal=false; this.selectedToday=[]; }
+
+        removeById(id){
+          this.tasks = this.tasks.filter(j=>j.id!==id);
+          this.save();
+        },
+
+        markDoneById(id){
+          const i=this.tasks.findIndex(j=>j.id===id);
+          this.tasks[i].done=new Date().toLocaleDateString();
+          pushToSheet(this.tasks[i],'done');
+          this.save();
+        },
+
+        changeRevisionById(id,val){
+          const i=this.tasks.findIndex(j=>j.id===id);
+          this.tasks[i].revisions=Math.max(0,this.tasks[i].revisions+val);
+          pushToSheet(this.tasks[i],'active');
+          this.save();
+        },
+
+        showDesc(job){
+          this.descContent=job.description; this.showDescModal=true;
+        },
+
+        toggleSelection(id){
+          const idx=this.selectedToday.indexOf(id.toString());
+          idx>=0 ? this.selectedToday.splice(idx,1) : this.selectedToday.push(id.toString());
+        },
+
+        addTodayTasks(){
+          this.todayTasks=this.tasks.filter(j=>this.selectedToday.includes(j.id.toString()));
+          this.todayTasks.forEach(j=>pushToSheet(j,'today'));
+          this.tab='today'; this.save(); this.closeModals();
+        },
+
+        resetToday(){
+          const today=new Date().toLocaleDateString();
+          if(localStorage.getItem('todayDate')!==today){
+            localStorage.setItem('todayDate',today);
+            this.todayTasks=[]; this.save();
+          }
+        },
+
+        reviseAgain(id){
+          const i=this.tasks.findIndex(j=>j.id===id);
+          delete this.tasks[i].done;
+          pushToSheet(this.tasks[i],'active');
+          this.save();
+        },
+
+        closeModals(){
+          this.showAddModal=false;
+          this.showDescModal=false;
+          this.showTodayModal=false;
+          this.selectedToday=[];
+        }
       }
     }
   </script>
