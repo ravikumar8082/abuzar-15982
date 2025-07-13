@@ -4,578 +4,167 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ABUZAR DASHBOARD</title>
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Alpine.js -->
   <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" integrity="sha512-b4JrW6HkwxeR6FzpZB4OxQ1P5WvgIYDL9T4N+gEyBh1k7owuMmhBXZBvx1yQF0EM5dfbXVLkGhbG64im+WuTew==" crossorigin="anonymous" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-    
-    * {
-      font-family: 'Inter', sans-serif;
-      transition: all 0.3s ease;
-    }
-    
-    body {
-      background: linear-gradient(135deg, #f0f4ff 0%, #f5f7fa 100%);
-      background-attachment: fixed;
-    }
-    
-    .glass-card {
-      background: rgba(255, 255, 255, 0.7);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-radius: 16px;
-      border: 1px solid rgba(255, 255, 255, 0.5);
-      box-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
-    }
-    
-    .task-card {
-      position: relative;
-      overflow: hidden;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      transform-origin: center;
-    }
-    
-    .task-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    }
-    
-    .task-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 5px;
-      height: 100%;
-      background: linear-gradient(to bottom, #667eea, #764ba2);
-    }
-    
-    .status-btn {
-      position: relative;
-      overflow: hidden;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-    
-    .status-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 7px 14px rgba(0, 0, 0, 0.1);
-    }
-    
-    .status-btn::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-      transition: all 0.6s ease;
-    }
-    
-    .status-btn:hover::after {
-      left: 100%;
-    }
-    
-    .tab-btn {
-      position: relative;
-      padding-bottom: 8px;
-    }
-    
-    .tab-btn::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 0;
-      height: 3px;
-      background: linear-gradient(to right, #667eea, #764ba2);
-      border-radius: 2px;
-      transition: width 0.3s ease;
-    }
-    
-    .tab-btn:hover::after {
-      width: 100%;
-    }
-    
-    .tab-btn.active::after {
-      width: 100%;
-    }
-    
-    .action-btn {
-      transition: all 0.2s ease;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    }
-    
-    .action-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-    
-    .modal-overlay {
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-    }
-    
-    .modal-content {
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-radius: 20px;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-    }
-    
-    input, select, textarea {
-      border: 1px solid #e2e8f0;
-      border-radius: 10px;
-      padding: 10px 14px;
-      background: rgba(255, 255, 255, 0.7);
-      transition: all 0.2s ease;
-    }
-    
-    input:focus, select:focus, textarea:focus {
-      outline: none;
-      border-color: #a3bffa;
-      box-shadow: 0 0 0 3px rgba(164, 202, 254, 0.45);
-      background: rgba(255, 255, 255, 0.9);
-    }
-    
-    .floating-btn {
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-      transition: all 0.3s ease;
-    }
-    
-    .floating-btn:hover {
-      transform: translateY(-3px) scale(1.03);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-    }
-    
-    .floating-btn::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-      transform: translateX(-100%);
-      transition: 0.6s;
-    }
-    
-    .floating-btn:hover::after {
-      transform: translateX(100%);
-    }
-    
-    .pulse {
-      animation: pulse 2s infinite;
-    }
-    
-    @keyframes pulse {
-      0% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.4); }
-      70% { box-shadow: 0 0 0 12px rgba(102, 126, 234, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0); }
-    }
-    
-    .neon-text {
-      text-shadow: 0 0 10px rgba(102, 126, 234, 0.7), 0 0 20px rgba(102, 126, 234, 0.5);
-    }
-    
-    .revision-badge {
-      animation: float 3s ease-in-out infinite;
-    }
-    
-    @keyframes float {
-      0% { transform: translateY(0px); }
-      50% { transform: translateY(-5px); }
-      100% { transform: translateY(0px); }
-    }
-    
-    .desc-preview {
-      cursor: pointer;
-      position: relative;
-    }
-    
-    .desc-preview::after {
-      content: 'Click to expand';
-      position: absolute;
-      bottom: -20px;
-      left: 0;
-      font-size: 10px;
-      color: #667eea;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-    
-    .desc-preview:hover::after {
-      opacity: 1;
-    }
-    
-    @media (max-width: 768px) {
-      .task-card::before {
-        width: 4px;
-      }
-      
-      .header-content {
-        flex-direction: column;
-        text-align: center;
-        gap: 15px;
-      }
-      
-      .task-actions {
-        flex-direction: column;
-        gap: 10px;
-      }
-      
-      .action-btn {
-        width: 100%;
-      }
-    }
-  </style>
+  <!-- AOS for animations (optional) -->
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
+  <script defer src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 </head>
-<body class="bg-gray-100 min-h-screen flex flex-col">
-  <header class="glass-card sticky top-0 z-50 shadow-lg p-6 flex justify-between items-center header-content">
-    <h1 class="text-4xl font-bold text-indigo-800 uppercase tracking-tight neon-text">ABUZAR</h1>
-    <button @click="toggleStatus()" class="px-6 py-3 rounded-full shadow-lg uppercase font-bold tracking-wide status-btn"
-            :class="status === 'FREE' ? 'bg-gradient-to-r from-green-400 to-emerald-500 text-white' : 'bg-gradient-to-r from-rose-500 to-red-600 text-white'">
-      <span x-text="status"></span>
-    </button>
+<body x-cloak class="bg-gray-100 min-h-screen font-sans">
+  <!-- Dashboard Header -->
+  <header class="p-6 bg-white shadow">
+    <h1 class="text-3xl font-bold uppercase">ABUZAR DASHBOARD</h1>
   </header>
 
-  <nav class="glass-card mt-4 mx-auto px-6 py-4 rounded-xl shadow-lg w-full md:max-w-4xl flex space-x-6 uppercase justify-center">
-    <button @click="tab='today'" :class="{'active text-indigo-700 font-bold': tab==='today'}" 
-            class="tab-btn text-gray-600 font-medium text-lg px-4 py-2">TODAY TASKS</button>
-    <button @click="tab='all'" :class="{'active text-indigo-700 font-bold': tab==='all'}" 
-            class="tab-btn text-gray-600 font-medium text-lg px-4 py-2">ALL TASKS</button>
-  </nav>
-
-  <main class="flex-grow mt-6 mx-auto w-full md:max-w-4xl p-4">
+  <!-- Main Content -->
+  <main class="p-6 md:px-12">
     <!-- ALL TASKS -->
-    <section x-show="tab==='all'" x-transition:enter="animate__animated animate__fadeIn" x-transition:leave="animate__animated animate__fadeOut">
-      <button @click="showAddModal=true" class="floating-btn px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-full uppercase mb-6 font-bold flex items-center gap-2">
-        <i class="fas fa-plus"></i> ADD TASK
-      </button>
+    <section>
+      <h2 class="text-2xl font-semibold uppercase mb-4">ALL TASKS</h2>
+      <button @click="showAddModal = true" class="px-4 py-2 bg-indigo-600 text-white rounded uppercase mb-6">ADD TASK</button>
 
-      <h3 class="text-xl font-semibold uppercase mb-4 text-indigo-800 tracking-wide">ACTIVE TASKS</h3>
-      <template x-for="job in activeTasks()" :key="job.id">
-        <div class="glass-card task-card p-5 rounded-xl shadow mb-5 animate__animated animate__fadeInUp">
-          <div class="flex flex-col md:flex-row justify-between items-start gap-4">
+      <h3 class="text-xl font-semibold uppercase mb-2">ACTIVE TASKS</h3>
+      <ul class="space-y-3">
+        <template x-for="job in activeTasks()" :key="job.id">
+          <li class="bg-white p-4 rounded-lg shadow flex justify-between items-start" data-aos="fade-up">
             <div class="flex-1">
-              <div class="flex justify-between items-start">
-                <h4 class="text-lg font-bold uppercase text-gray-800" x-text="job.name"></h4>
-                <span class="revision-badge bg-gradient-to-r from-amber-300 to-orange-400 text-gray-800 text-xs font-bold px-2 py-1 rounded-full" x-text="`Revisions: ${job.revisions}`"></span>
-              </div>
-              <p class="text-gray-600 mt-2 mb-4">
-                <span class="desc-preview" x-text="job.description.slice(0,5)+'...'" @click="showDesc(job)"></span>
-              </p>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <div>
-                  <label class="text-xs uppercase text-gray-500 font-bold tracking-wide">CREATED DATE</label>
-                  <div class="flex items-center gap-2 mt-1">
-                    <i class="fas fa-calendar-plus text-indigo-500"></i>
-                    <input type="text" x-bind:value="job.created" readonly class="w-full border p-2 rounded-lg bg-gray-50 text-gray-700" />
-                  </div>
-                </div>
-                <div>
-                  <label class="text-xs uppercase text-gray-500 font-bold tracking-wide">DEADLINE</label>
-                  <div class="flex items-center gap-2 mt-1">
-                    <i class="fas fa-calendar-day text-indigo-500"></i>
-                    <input type="date" x-model="job.deadline" @change="save()" class="w-full border p-2 rounded-lg text-gray-700" />
-                  </div>
-                </div>
-              </div>
+              <h4 class="text-lg font-medium uppercase" x-text="job.name"></h4>
+              <p class="text-gray-600 mb-2" x-text="job.description"></p>
+              <p class="text-sm uppercase text-gray-500">Created: <span x-text="job.created"></span></p>
+              <p class="text-sm uppercase text-gray-500">Deadline: <input type="date" x-model="job.deadline" @change="save()" class="border p-1 rounded" /></p>
             </div>
-            <div class="ml-4 space-y-3 text-center uppercase task-actions flex flex-col">
-              <button @click="markDoneById(job.id)" class="action-btn px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg font-bold flex items-center justify-center gap-2">
-                <i class="fas fa-check-circle"></i> MARK DONE
-              </button>
-              <div class="bg-gray-100 rounded-lg p-2">
-                <span class="text-xs uppercase text-gray-600 font-bold">REVISIONS</span>
-                <div class="flex items-center justify-center mt-1">
-                  <button @click="changeRevisionById(job.id,-1)" class="px-3 py-1 bg-gray-200 rounded-l-lg hover:bg-gray-300">
-                    <i class="fas fa-minus"></i>
-                  </button>
-                  <span class="px-3 py-1 border-t border-b bg-white font-bold" x-text="job.revisions"></span>
-                  <button @click="changeRevisionById(job.id,1)" class="px-3 py-1 bg-gray-200 rounded-r-lg hover:bg-gray-300">
-                    <i class="fas fa-plus"></i>
-                  </button>
+            <div class="ml-4 space-y-2 text-center uppercase">
+              <button @click="markDone(job.id)" class="block w-full px-2 py-1 bg-green-500 text-white rounded">MARK DONE</button>
+              <div>
+                <span class="text-sm">REVISIONS</span>
+                <div class="inline-flex mt-1">
+                  <button @click="changeRevision(job.id, -1)" class="px-2 py-1 bg-gray-200 rounded-l">-</button>
+                  <span class="px-2 py-1 border-t border-b" x-text="job.revisions"></span>
+                  <button @click="changeRevision(job.id, 1)" class="px-2 py-1 bg-gray-200 rounded-r">+</button>
                 </div>
               </div>
-              <div class="bg-gray-100 rounded-lg p-2">
-                <label class="text-xs uppercase text-gray-600 font-bold block">PAYMENT</label>
-                <select x-model="job.payment" @change="save()" class="mt-1 px-2 py-2 border rounded-lg w-full text-center">
+              <div>
+                <label class="text-sm block">PAYMENT</label>
+                <select x-model="job.payment" @change="save()" class="mt-1 px-2 py-1 border rounded w-full">
                   <option value="PENDING">PENDING</option>
                   <option value="PAID">PAID</option>
                   <option value="DON'T KNOW">DON'T KNOW</option>
                 </select>
               </div>
-              <button @click="removeById(job.id)" class="action-btn text-white bg-gradient-to-r from-rose-500 to-red-600 px-3 py-2 rounded-lg">
-                <i class="fas fa-trash-alt"></i> DELETE
-              </button>
+              <button @click="removeTask(job.id)" class="text-red-600">✕</button>
             </div>
-          </div>
-        </div>
-      </template>
+          </li>
+        </template>
+      </ul>
 
-      <h3 class="text-xl font-semibold uppercase mt-10 mb-4 text-indigo-800 tracking-wide">JOBS DONE</h3>
-      <template x-for="job in doneTasks()" :key="job.id">
-        <div class="glass-card task-card p-5 rounded-xl shadow mb-5 animate__animated animate__fadeInUp">
-          <div class="flex flex-col md:flex-row justify-between items-start gap-4">
-            <div class="flex-1">
-              <div class="flex justify-between items-start">
-                <h4 class="text-lg font-bold uppercase text-gray-700" x-text="job.name"></h4>
-                <span class="bg-gradient-to-r from-green-400 to-emerald-500 text-white text-xs font-bold px-2 py-1 rounded-full">COMPLETED</span>
-              </div>
-              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-                <div class="flex items-center gap-2">
-                  <i class="fas fa-check-circle text-emerald-500"></i>
-                  <div>
-                    <p class="text-xs uppercase text-gray-500 font-bold">DONE ON</p>
-                    <p class="text-sm text-gray-700" x-text="job.done"></p>
-                  </div>
-                </div>
-                <div class="flex items-center gap-2">
-                  <i class="fas fa-clock text-amber-500"></i>
-                  <div>
-                    <p class="text-xs uppercase text-gray-500 font-bold">DEADLINE</p>
-                    <p class="text-sm text-gray-700" x-text="job.deadline"></p>
-                  </div>
-                </div>
-                <div class="flex items-center gap-2">
-                  <i class="fas fa-sync-alt text-indigo-500"></i>
-                  <div>
-                    <p class="text-xs uppercase text-gray-500 font-bold">REVISIONS</p>
-                    <p class="text-sm text-gray-700" x-text="job.revisions"></p>
-                  </div>
-                </div>
-              </div>
-              <div class="mt-4 flex items-center gap-2">
-                <i class="fas fa-money-bill-wave text-green-500"></i>
-                <div>
-                  <p class="text-xs uppercase text-gray-500 font-bold">PAYMENT</p>
-                  <p class="text-sm font-medium" :class="job.payment === 'PAID' ? 'text-green-600' : job.payment === 'PENDING' ? 'text-amber-600' : 'text-gray-700'" x-text="job.payment"></p>
-                </div>
-              </div>
-              <p class="mt-4 text-gray-600 bg-gray-50 p-3 rounded-lg" x-text="job.description"></p>
+      <h3 class="text-xl font-semibold uppercase mt-8 mb-2">JOBS DONE</h3>
+      <ul class="space-y-3">
+        <template x-for="job in doneTasks()" :key="job.id">
+          <li class="bg-white p-4 rounded-lg shadow flex justify-between items-start" data-aos="fade-up">
+            <div>
+              <h4 class="text-lg font-medium uppercase" x-text="job.name"></h4>
+              <p class="text-sm uppercase text-gray-500">Done on: <span x-text="job.done"></span></p>
+              <p class="text-sm uppercase text-gray-500">Revisions: <span x-text="job.revisions"></span></p>
+              <p class="text-sm uppercase text-gray-500">Payment: <span x-text="job.payment"></span></p>
+              <p class="mt-2 text-gray-600" x-text="job.description"></p>
             </div>
-            <div class="ml-4 space-y-2 uppercase text-center">
-              <button @click="reviseAgain(job.id)" class="action-btn px-4 py-2 bg-gradient-to-r from-amber-400 to-orange-500 text-white rounded-lg font-bold flex items-center justify-center gap-2">
-                <i class="fas fa-redo-alt"></i> REVISE AGAIN
-              </button>
-            </div>
-          </div>
-        </div>
-      </template>
-    </section>
-
-    <!-- TODAY TASKS -->
-    <section x-show="tab==='today'" x-transition:enter="animate__animated animate__fadeIn" x-transition:leave="animate__animated animate__fadeOut">
-      <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-        <h2 class="text-2xl font-bold uppercase text-indigo-800 tracking-tight">TODAY'S TASKS</h2>
-        <button @click="showTodayModal=true" class="floating-btn px-5 py-2.5 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-full uppercase font-bold flex items-center gap-2">
-          <i class="fas fa-tasks"></i> SELECT TASKS
-        </button>
-      </div>
-      <template x-for="job in todayTasks" :key="job.id">
-        <div class="glass-card task-card p-5 rounded-xl shadow mb-5 animate__animated animate__fadeInUp">
-          <h4 class="text-lg font-bold uppercase text-gray-800 flex items-center gap-2">
-            <i class="fas fa-circle-notch text-indigo-500 animate-spin"></i>
-            <span x-text="job.name"></span>
-          </h4>
-          <p class="text-gray-600 mt-3 mb-4">
-            <span class="desc-preview cursor-pointer" @click="showDesc(job)" x-text="job.description.slice(0,5)+'...'"></span>
-          </p>
-          <div class="flex items-center gap-2 text-sm text-gray-600">
-            <i class="fas fa-calendar-day text-indigo-500"></i>
-            <span class="font-medium">DEADLINE: </span>
-            <span class="font-bold" x-text="job.deadline"></span>
-          </div>
-        </div>
-      </template>
-      
-      <div x-show="todayTasks.length === 0" class="text-center py-12">
-        <i class="fas fa-clipboard-list text-gray-300 text-6xl mb-4"></i>
-        <h3 class="text-xl font-bold text-gray-500">No tasks selected for today</h3>
-        <p class="text-gray-400 mt-2">Click "Select Tasks" to add tasks for today</p>
-      </div>
+            <button @click="reviseTask(job.id)" class="px-2 py-1 bg-yellow-500 text-white rounded uppercase">REVISE AGAIN</button>
+          </li>
+        </template>
+      </ul>
     </section>
   </main>
 
-  <!-- MODALS -->
-  <div x-show="showAddModal||showDescModal||showTodayModal" 
-       class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center p-4 z-50 modal-overlay"
-       x-transition:enter="animate__animated animate__fadeIn"
-       x-transition:leave="animate__animated animate__fadeOut">
-    <div class="modal-content w-full max-w-md animate__animated animate__zoomIn">
-      <!-- ADD TASK -->
-      <template x-if="showAddModal">
-        <div class="p-6">
-          <h3 class="text-xl font-bold uppercase mb-4 text-indigo-700 tracking-wide">ADD NEW TASK</h3>
-          <div class="space-y-4">
-            <div>
-              <label class="text-xs uppercase text-gray-500 font-bold tracking-wide">CREATION DATE</label>
-              <input type="text" x-bind:value="newJob.created" readonly class="w-full p-3 rounded-xl border bg-gray-50 text-gray-700" />
-            </div>
-            <div>
-              <label class="text-xs uppercase text-gray-500 font-bold tracking-wide">TASK NAME</label>
-              <input x-model="newJob.name" type="text" placeholder="Job Name" class="w-full p-3 rounded-xl border" />
-            </div>
-            <div>
-              <label class="text-xs uppercase text-gray-500 font-bold tracking-wide">DESCRIPTION</label>
-              <textarea x-model="newJob.description" placeholder="Description" rows="3" class="w-full p-3 rounded-xl border"></textarea>
-            </div>
-            <div>
-              <label class="text-xs uppercase text-gray-500 font-bold tracking-wide">DEADLINE</label>
-              <input x-model="newJob.deadline" type="date" class="w-full p-3 rounded-xl border" />
-            </div>
-          </div>
-          <div class="flex justify-end space-x-3 mt-6">
-            <button @click="addJob()" class="floating-btn px-5 py-2.5 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl uppercase font-bold">
-              ADD TASK
-            </button>
-            <button @click="closeModals()" class="px-5 py-2.5 border border-gray-300 text-gray-700 rounded-xl uppercase font-bold hover:bg-gray-100">
-              CANCEL
-            </button>
-          </div>
-        </div>
-      </template>
-
-      <!-- DESCRIPTION POPUP -->
-      <template x-if="showDescModal">
-        <div class="p-6">
-          <h3 class="text-xl font-bold uppercase mb-4 text-indigo-700 tracking-wide">DESCRIPTION</h3>
-          <div class="bg-gray-50 p-4 rounded-xl min-h-[150px] max-h-[300px] overflow-y-auto">
-            <p x-text="descContent" class="text-gray-700"></p>
-          </div>
-          <button @click="closeModals()" class="mt-6 w-full px-5 py-2.5 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl uppercase font-bold floating-btn">
-            CLOSE
-          </button>
-        </div>
-      </template>
-
-      <!-- TODAY SELECT -->
-      <template x-if="showTodayModal">
-        <div class="p-6">
-          <h3 class="text-xl font-bold uppercase mb-4 text-indigo-700 tracking-wide">SELECT TODAY'S TASKS</h3>
-          <div class="max-h-[300px] overflow-y-auto pr-2 space-y-2">
-            <template x-for="job in activeTasks()" :key="job.id">
-              <div class="flex items-center p-3 rounded-lg border border-gray-200 hover:bg-indigo-50 cursor-pointer" @click="toggleSelection(job.id)">
-                <input type="checkbox" :value="job.id" x-model="selectedToday" class="mr-3 h-5 w-5 text-indigo-600 rounded focus:ring-indigo-500" />
-                <div>
-                  <span class="font-medium text-gray-800" x-text="job.name"></span>
-                  <p class="text-xs text-gray-500 mt-1" x-text="job.description.slice(0,30)+'...'"></p>
-                </div>
-              </div>
-            </template>
-          </div>
-          <div class="flex justify-end space-x-3 mt-6">
-            <button @click="addTodayTasks()" class="floating-btn px-5 py-2.5 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl uppercase font-bold">
-              ADD SELECTED
-            </button>
-            <button @click="closeModals()" class="px-5 py-2.5 border border-gray-300 text-gray-700 rounded-xl uppercase font-bold hover:bg-gray-100">
-              CANCEL
-            </button>
-          </div>
-        </div>
-      </template>
+  <!-- Add Task Modal -->
+  <div x-show="showAddModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-11/12 md:w-1/3" @click.away="showAddModal = false" data-aos="zoom-in">
+      <h3 class="text-xl font-semibold uppercase mb-4">ADD NEW TASK</h3>
+      <label class="text-sm uppercase">TASK NAME</label>
+      <input x-model="newJob.name" type="text" placeholder="Name" class="w-full mb-2 p-2 border rounded" />
+      <label class="text-sm uppercase">DESCRIPTION</label>
+      <textarea x-model="newJob.description" placeholder="Description" class="w-full mb-2 p-2 border rounded"></textarea>
+      <label class="text-sm uppercase">DEADLINE</label>
+      <input x-model="newJob.deadline" type="date" class="w-full mb-4 p-2 border rounded" />
+      <div class="flex justify-end space-x-2">
+        <button @click="addTask()" class="px-4 py-2 bg-indigo-600 text-white rounded uppercase">ADD</button>
+        <button @click="showAddModal = false" class="px-4 py-2 border rounded uppercase">CANCEL</button>
+      </div>
     </div>
   </div>
 
   <script>
-    function taskApp(){
+    function taskApp() {
       return {
-        tab: 'today',
-        status: localStorage.getItem('status')||'FREE',
-        tasks: JSON.parse(localStorage.getItem('tasks')||'[]'),
-        todayTasks: JSON.parse(localStorage.getItem('todayTasks')||'[]'),
-        newJob: { name:'', description:'', deadline:new Date().toISOString().substr(0,10), created:new Date().toLocaleDateString(), revisions:0, payment:'PENDING', id:null },
-        descContent:'',
-        selectedToday: [],
-        showAddModal:false, showDescModal:false, showTodayModal:false,
-        init(){ this.resetToday(); },
-        save(){
-          localStorage.setItem('tasks', JSON.stringify(this.tasks));
-          localStorage.setItem('status', this.status);
-          localStorage.setItem('todayTasks', JSON.stringify(this.todayTasks));
-        },
-        toggleStatus(){ this.status = this.status==='FREE'?'BUSY':'FREE'; this.save(); },
-        activeTasks(){ return this.tasks.filter(j=>!j.done); },
-        doneTasks(){ return this.tasks.filter(j=>j.done); },
-        addJob(){
-          const j = {...this.newJob, id: Date.now()};
-          this.tasks.push(j);
-          this.newJob = { name:'', description:'', deadline:new Date().toISOString().substr(0,10), created:new Date().toLocaleDateString(), revisions:0, payment:'PENDING', id:null };
-          this.save(); this.closeModals();
-        },
-        removeById(id){ 
-          this.tasks = this.tasks.filter(j=>j.id!==id); 
-          this.save(); 
-        },
-        markDoneById(id){ 
-          const i=this.tasks.findIndex(j=>j.id===id); 
-          this.tasks[i].done = new Date().toLocaleDateString(); 
-          this.save(); 
-        },
-        changeRevisionById(id,val){ 
-          const i=this.tasks.findIndex(j=>j.id===id); 
-          this.tasks[i].revisions = Math.max(0, this.tasks[i].revisions+val); 
-          this.save(); 
-        },
-        showDesc(job){ 
-          this.descContent = job.description; 
-          this.showDescModal = true; 
-        },
-        toggleSelection(id){
-          const idx = this.selectedToday.indexOf(id.toString());
-          if(idx>=0) this.selectedToday.splice(idx,1);
-          else this.selectedToday.push(id.toString());
-        },
-        addTodayTasks(){
-          this.todayTasks = this.tasks.filter(j=> this.selectedToday.includes(j.id.toString()) );
-          this.tab = 'today';
-          this.save(); this.closeModals();
-        },
-        resetToday(){ 
-          const today=new Date().toLocaleDateString(); 
-          if(localStorage.getItem('todayDate')!==today){ 
-            localStorage.setItem('todayDate',today); 
-            this.todayTasks=[]; 
-            this.save(); 
-          } 
-        },
-        reviseAgain(id){ 
-          const i=this.tasks.findIndex(j=>j.id===id); 
-          delete this.tasks[i].done; 
-          this.save(); 
-        },
-        closeModals(){ 
-          this.showAddModal=false; 
-          this.showDescModal=false; 
-          this.showTodayModal=false; 
-          this.selectedToday=[]; 
-        }
-        todayTasks: JSON.parse(localStorage.getItem('todayTasks')||'[]'),
+        tasks: JSON.parse(localStorage.getItem('tasks') || '[]'),
+        showAddModal: false,
+        newJob: { name: '', description: '', deadline: new Date().toISOString().substr(0,10), created: new Date().toLocaleDateString(), revisions: 0, payment: 'PENDING' },
+        init() {
+          if (typeof AOS !== 'undefined') AOS.init();
 
-      init() {
-        this.resetToday();
-
-        // now that 'this' is your Alpine component, you can respond with its real state:
-        window.addEventListener('message', e => {
-          if (e.data.type === 'REQUEST_ALL') {
-            e.source.postMessage({
-              type:    'RESPONSE_ALL',
-              name:    'ABUZAR',
-              today:   this.todayTasks,
-              active:  this.activeTasks(),
-              done:    this.doneTasks()
+          // Listen for owner dashboard requests
+          window.addEventListener('message', e => {
+            if (e.data.type === 'REQUEST_ALL') {
+              e.source.postMessage({
+                type: 'RESPONSE_ALL',
+                name: 'ABUZAR',
+                today: this.todayTasks(),
+                active: this.activeTasks(),
+                done: this.doneTasks()
               }, e.origin);
             }
           });
         },
-      }
+        save() {
+          localStorage.setItem('tasks', JSON.stringify(this.tasks));
+        },
+        activeTasks() {
+          return this.tasks.filter(job => !job.done);
+        },
+        doneTasks() {
+          return this.tasks.filter(job => job.done);
+        },
+        todayTasks() {
+          // For simplicity, use active tasks that were created today
+          const today = new Date().toLocaleDateString();
+          return this.activeTasks().filter(job => job.created === today);
+        },
+        addTask() {
+          const { name, description, deadline, created, revisions, payment } = this.newJob;
+          if (!name.trim()) return;
+          const job = { id: Date.now(), name, description, deadline, created, revisions, payment, done: false };
+          this.tasks.push(job);
+          this.newJob = { name: '', description: '', deadline: new Date().toISOString().substr(0,10), created: new Date().toLocaleDateString(), revisions: 0, payment: 'PENDING' };
+          this.showAddModal = false;
+          this.save();
+        },
+        markDone(id) {
+          const job = this.tasks.find(j => j.id === id);
+          if (job) {
+            job.done = new Date().toLocaleDateString();
+            this.save();
+          }
+        },
+        changeRevision(id, delta) {
+          const job = this.tasks.find(j => j.id === id);
+          if (job) {
+            job.revisions = Math.max(0, job.revisions + delta);
+            this.save();
+          }
+        },
+        removeTask(id) {
+          this.tasks = this.tasks.filter(j => j.id !== id);
+          this.save();
+        },
+        reviseTask(id) {
+          const job = this.tasks.find(j => j.id === id);
+          if (job) {
+            delete job.done;
+            this.save();
+          }
+        }
+      };
     }
   </script>
 </body>
