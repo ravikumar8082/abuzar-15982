@@ -559,22 +559,18 @@
         }
       }
     }
-  </script>
-  <script>
+
   window.addEventListener('message', e => {
-    if (e.data.action === 'SEND_DATA') {
-      const data = {
-        todayTasks: window.todayTasks||[],
-        activeTasks: window.tasks.filter(t=>!t.done)||[],
-        doneTasks: window.tasks.filter(t=>t.done)||[]
-      };
-      window.parent.postMessage({
-        action: 'TODASHBOARD_DATA',
-        name: /* your employee name, e.g. */ 'ABUZAR',
-        data
-      }, '*');
-    }
-  });
-</script>
+  if (e.data.type === 'REQUEST_ALL') {
+    e.source.postMessage({
+      type: 'RESPONSE_ALL',
+      name: 'ABUZAR',
+      today: this.todayTasks,
+      active: this.activeTasks(),
+      done: this.doneTasks()
+    }, e.origin);
+  }
+});
+  </script>
 </body>
 </html>
